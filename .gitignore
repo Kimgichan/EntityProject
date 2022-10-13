@@ -58,3 +58,14 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+EntityProject/Library/Artifacts/*
+EntityProject/Library/Bee/*
+EntityProject/Library/BurstCache/*
+EntityProject/Library/PackageCache/*
+EntityProject/Library/PackageManager/*
+EntityProject/Library/ScriptAssemblies/*
+EntityProject/Library/ShaderCache/*
+EntityProject/Library/Search/*
+EntityProject/Library/APIUpdater/*
+EntityProject/Library/StateCache/*
+EntityProject/Logs/*
