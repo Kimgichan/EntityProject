@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
 
+[GenerateAuthoringComponent]
 public struct LevelComponent : IComponentData
 {
     public float level;

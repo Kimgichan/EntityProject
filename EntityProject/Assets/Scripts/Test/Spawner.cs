@@ -11,6 +11,7 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] private GameObject prefab;
     [SerializeField] private int createNumber;
+    private BlobAssetStore blobAssetStore;
 
     // Start is called before the first frame update
     void Start()
@@ -59,16 +60,23 @@ public class Spawner : MonoBehaviour
         //entityArray.Dispose();
         #endregion
 
-        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, null);
+        blobAssetStore = new BlobAssetStore();
+
+        var settings = GameObjectConversionSettings.FromWorld(World.DefaultGameObjectInjectionWorld, blobAssetStore);
         var entityPrefab = GameObjectConversionUtility.ConvertGameObjectHierarchy(prefab, settings);
 
         for(int i = 0; i<createNumber; i++)
         {
             var instance = entityManager.Instantiate(entityPrefab);
 
-            entityManager.SetComponentData(instance, new Translation { Value = new Unity.Mathematics.float3(Random.Range(-20f, 20f), Random.Range(-5f, 5f), 0f) });
-            entityManager.AddComponentData(instance, new Scale { Value = 0.25f });
+            entityManager.AddComponentData(instance, new Translation { Value = new Unity.Mathematics.float3(Random.Range(-20f, 20f), Random.Range(-5f, 5f), 0f) });
+            entityManager.AddComponentData(instance, new Scale { Value = 1f });
             entityManager.AddComponentData(instance, new MoveSpeedComponent { speed = Random.Range(-1f, 1f) });
         }
+    }
+
+    private void OnDestroy()
+    {
+        blobAssetStore.Dispose();
     }
 }

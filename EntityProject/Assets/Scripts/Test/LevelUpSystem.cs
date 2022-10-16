@@ -1,15 +1,23 @@
-
-using UnityEngine;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Burst;
+using Unity.Jobs;
+using Unity.Mathematics;
+using Unity.Transforms;
+using UnityEngine;
 
-public class LevelUpSystem : ComponentSystem
+
+public partial class LevelUpSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        Entities.ForEach((ref LevelComponent levelComponent) =>
-        {
-            levelComponent.level += 1f * UnityEngine.Time.deltaTime;
-            //Debug.Log(levelComponent.level);
-        });
+        //var deltaTime = UnityEngine.Time.deltaTime;
+        //Entities.ForEach((ref LevelComponent levelComponent) =>
+        //{
+        //    levelComponent.level += 1f * deltaTime;
+        //    //Debug.Log(levelComponent.level);
+        //}).Schedule();
     }
 }
+
+//ComponentSystem
