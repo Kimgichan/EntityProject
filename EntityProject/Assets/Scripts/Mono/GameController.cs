@@ -8,6 +8,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class GameController : MonoBehaviour
@@ -17,11 +18,21 @@ public class GameController : MonoBehaviour
     public GameObject player;
     [SerializeField] private EntitySpawner entitySpawner;
     [SerializeField] private float spawnDistance;
+    private int _spawnCount;
     [SerializeField] private int spawnCount;
     [SerializeField] private float spawnDelay;
+    private float _moveSpeed;
     [SerializeField] private float moveSpeed;
+    private float _collisionRadius;
     [SerializeField] private float collisionRadius;
+    private float _playerMoveSpeed;
+    [SerializeField] private float playerMoveSpeed;
     private EntityManager entityManager;
+
+    [SerializeField] private Text spawnCountTxt;
+    [SerializeField] private Text moveSpeedTxt;
+    [SerializeField] private Text collisionRadiusTxt;
+    [SerializeField] private Text playerMoveTxt;
 
     //public NativeList<Translation> transArray;
     //public NativeList<EntityKeyComponent> keys;
@@ -29,6 +40,8 @@ public class GameController : MonoBehaviour
 
     public EntitySpawner EntitySpawner => entitySpawner;
     public EntityManager EntityManager => entityManager;
+
+    public float PlayerMoveSpeed => playerMoveSpeed;
     
 
     public float MoveSpeed => moveSpeed;
@@ -36,6 +49,7 @@ public class GameController : MonoBehaviour
 
     IEnumerator Start()
     {
+        Application.targetFrameRate = 60;
         while(GameManager.Instance == null)
         {
             yield return null;
@@ -98,7 +112,46 @@ public class GameController : MonoBehaviour
         entityManager.AddComponentData(entity, new StateComponent(Enums.EntityState.AllOff));
         entityManager.AddComponentData(entity, new EntityKeyComponent { key = keyCount++ });
         entityManager.AddComponentData(entity, new CollisionComponent { radius = collisionRadius });
+        entityManager.AddComponentData(entity, new HPComponent { hp = 1 });
 
         //entities.Add(entity);
+    }
+
+
+    public void OnValueChange_SpawnCount(float value)
+    {
+        spawnCountTxt.text = ((int)value).ToString();
+        _spawnCount = (int)value;
+    }
+
+    public void OnValueChange_CollisionRadius(float value)
+    {
+        collisionRadiusTxt.text = string.Format("{0,10:N2}", value);
+        _collisionRadius = value;
+    }
+
+    public void OnValueChange_MoveSpeed(float value)
+    {
+        moveSpeedTxt.text = string.Format("{0,10:N2}", value);
+        _moveSpeed = value;
+    }
+
+    public void OnValueChange_PlayerMoveSpeed(float value)
+    {
+        playerMoveTxt.text = string.Format("{0,10:N2}", value);
+        _playerMoveSpeed = value;
+    }
+
+    public void EnterSettingValue()
+    {
+        spawnCount = _spawnCount;
+        collisionRadius = _collisionRadius;
+        moveSpeed = _moveSpeed;
+        playerMoveSpeed = _playerMoveSpeed;
+
+
+        StopAllCoroutines();
+        EntitySpawner.EntityReset();
+        StartRound();
     }
 }

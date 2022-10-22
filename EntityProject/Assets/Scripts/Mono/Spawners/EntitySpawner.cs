@@ -38,4 +38,19 @@ public  class EntitySpawner : MonoBehaviour
 
         entityManager.DestroyEntity(entityPrefab);
     }
+
+    public void EntityReset()
+    {
+        var entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        var entities = entityManager.GetAllEntities();
+
+
+        for(int i = 0, icount = entities.Length; i<icount; i++)
+        {
+            if (entityManager.HasComponent(entities[i], typeof(HPComponent)))
+            {
+                entityManager.SetComponentData(entities[i], new HPComponent() { hp = 0 });
+            }
+        }
+    }
 }
